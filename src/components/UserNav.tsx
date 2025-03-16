@@ -6,9 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
-import { Button } from "./ui/button";
 
-const UserSettings = () => {
+const UserNav = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,4 +25,4 @@ const UserSettings = () => {
   );
 };
 
-export default UserSettings;
+export default UserNav;
