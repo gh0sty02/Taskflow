@@ -5,7 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
-const LoginPage = () => {
+import { signIn, auth } from "@/auth";
+import { redirect } from "next/navigation";
+
+async function LoginPage() {
+  const session = await auth();
+
+  if (session?.user) {
+    return redirect("/dashboard");
+  }
   return (
     <div className="container flex flex-col items-center justify-center flex-1 space-y-4">
       <div className="flex flex-col items-center">
@@ -25,6 +33,10 @@ const LoginPage = () => {
           <Button
             variant="outline"
             className="text-white p-2 rounded-lg bg-transparent w-full"
+            onClick={async () => {
+              "use server";
+              await signIn("github");
+            }}
           >
             <FiGithub className="h-4 w-4 mr-2" />
             Github
@@ -39,7 +51,15 @@ const LoginPage = () => {
               </span>
             </div>
           </div>
-          <form className="grid gap-2">
+          <form
+            // action={async (formData) => {
+            //   "use server";
+            //   await signIn("credentials", formData);
+            // }}
+            className="grid gap-2"
+          >
+            {/* used to redirect to the authenticated page after login  */}
+            <input type="hidden" name="redirectTo" value="/" />
             <div className="flex flex-col gap-2">
               <div className="flex flex-row justify-between">
                 <Label htmlFor="email" className="mb-0">
@@ -56,6 +76,7 @@ const LoginPage = () => {
               <Input
                 type="text"
                 id="email"
+                name="email"
                 placeholder="
                 name@example.com
 "
@@ -68,7 +89,12 @@ const LoginPage = () => {
                 Password
               </Label>
 
-              <Input type="password" id="password" placeholder="Password" />
+              <Input
+                name="password"
+                type="password"
+                id="password"
+                placeholder="Password"
+              />
             </div>
             <Button type="submit" className="mt-4 w-full">
               Sign in
@@ -85,6 +111,6 @@ const LoginPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default LoginPage;
