@@ -4,16 +4,9 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { signIn } from "@/auth";
 
-import { signIn, auth } from "@/auth";
-import { redirect } from "next/navigation";
-
-async function LoginPage() {
-  const session = await auth();
-
-  if (session?.user) {
-    return redirect("/dashboard");
-  }
+function LoginPage() {
   return (
     <div className="container flex flex-col items-center justify-center flex-1 space-y-4">
       <div className="flex flex-col items-center">
