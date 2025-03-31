@@ -9,13 +9,9 @@ export default async function Login({
   [key: string]: string;
 }) {
   const session = await auth();
-  const redirectUrl =
-    new URLSearchParams(await searchParams).get("redirect") || "/profile";
-
-  console.log({ redirectUrl });
-
-  if (session?.user) {
-    return redirect(redirectUrl);
+  console.log({ session });
+  if (session?.user?.email) {
+    redirect("/profile");
   }
   return <LoginPage />;
 }

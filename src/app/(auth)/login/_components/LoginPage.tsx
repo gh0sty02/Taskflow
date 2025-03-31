@@ -45,14 +45,14 @@ function LoginPage() {
             </div>
           </div>
           <form
-            // action={async (formData) => {
-            //   "use server";
-            //   await signIn("credentials", formData);
-            // }}
+            action={async (formData) => {
+              "use server";
+              await signIn("credentials", formData);
+            }}
             className="grid gap-2"
           >
             {/* used to redirect to the authenticated page after login  */}
-            <input type="hidden" name="redirectTo" value="/" />
+            {/* <input type="hidden" name="redirectTo" value="/" /> */}
             <div className="flex flex-col gap-2">
               <div className="flex flex-row justify-between">
                 <Label htmlFor="email" className="mb-0">

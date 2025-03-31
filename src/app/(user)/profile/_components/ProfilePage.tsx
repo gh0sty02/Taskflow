@@ -1,12 +1,11 @@
-import { auth } from "@/auth";
+"use client";
+import { User } from "next-auth";
 import React from "react";
 
-export default async function ProfilePage() {
-  const session = await auth();
-
+export default function ProfilePage({ user }: { user: User }) {
   return (
     <div>
-      Welcome, {session?.user?.name}! Your email is {session?.user?.email}.
+      Welcome, {user.name}! Your email is {user?.email}.
     </div>
   );
 }

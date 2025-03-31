@@ -1,5 +1,3 @@
-"use client";
-
 const HomePage = () => {
   return (
     <section className="grid lg:grid-cols-10">

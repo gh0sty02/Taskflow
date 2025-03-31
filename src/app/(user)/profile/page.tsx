@@ -3,17 +3,10 @@ import ProfilePage from "./_components/ProfilePage";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-export default async function Profile({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string };
-}) {
+export default async function Profile() {
   const session = await auth();
-  if (!session) {
-    const currentUrl = `/profile?${new URLSearchParams(
-      await searchParams
-    )}`.toString();
-    redirect(`/login?redirect=${encodeURIComponent(currentUrl)}`);
+  if (!session?.user) {
+    return redirect("/login");
   }
-  return <ProfilePage />;
+  return <ProfilePage user={session.user} />;
 }
