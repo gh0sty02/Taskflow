@@ -27,7 +27,7 @@ const TextInput = ({
         id={id}
         name={name}
         placeholder={placeholder}
-        className="p-2"
+        className="p-2 placeholder:text-sm px-2"
       />
     </div>
   );

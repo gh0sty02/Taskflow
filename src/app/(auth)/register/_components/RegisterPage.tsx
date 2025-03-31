@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signIn } from "@/auth";
 import { Checkbox } from "@/components/ui/checkbox";
+import TextInput from "@/components/TextInput";
+import PasswordInput from "@/components/PasswordInput";
 
 function RegisterPage() {
   return (
@@ -48,68 +50,42 @@ function RegisterPage() {
           <form
             action={async (formData) => {
               "use server";
-              await signIn("credentials", formData);
+              // log everythign from formData
+              for (const [key, value] of formData.entries()) {
+                console.log(key, value);
+              }
             }}
             className="grid gap-2 space-y-2"
           >
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row justify-between">
-                <Label htmlFor="email" className="mb-0">
-                  Full Name
-                </Label>
-              </div>
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="John Doe"
-                autoComplete="false"
-                className="p-2"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row justify-between">
-                <Label htmlFor="email" className="mb-0">
-                  Email
-                </Label>
-              </div>
-              <Input
-                type="text"
-                id="email"
-                name="email"
-                placeholder="
-                name@example.com
-"
-                autoComplete="false"
-                className="p-2"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row justify-between">
-                <Label htmlFor="password" className="mb-0">
-                  Password
-                </Label>
-              </div>
+            <TextInput
+              htmlFor="name"
+              label="Full Name"
+              id="name"
+              name="name"
+              placeholder="John Doe"
+            />
+            <TextInput
+              htmlFor="email"
+              label="Email"
+              id="email"
+              name="email"
+              placeholder="name@example.com"
+            />
 
-              <Input name="password" type="password" id="password" />
-              <p className="text-xs text-muted-foreground">
-                Password may contain at least 8 characters, including letters,
-                numbers, and symbols.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row justify-between">
-                <Label htmlFor="password" className="mb-0">
-                  Confirm Password
-                </Label>
-              </div>
-
-              <Input
-                name="confirm-password"
-                type="password"
-                id="confirm-password"
-              />
-            </div>
+            <PasswordInput
+              htmlFor="password"
+              label="Password"
+              id="password"
+              name="password"
+              showHint={true}
+            />
+            <PasswordInput
+              htmlFor="confirm-password"
+              label="Confirm Password"
+              id="confirm-password"
+              name="confirm-password"
+              showHint={false}
+            />
 
             <div className="flex items-center space-x-2">
               <Checkbox id="terms" />
