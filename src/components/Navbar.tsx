@@ -20,10 +20,12 @@ const Navbar = () => {
       <div className="container text-white flex flex-row justify-between w-full py-2 px-8 mx-auto">
         <div className="flex flex-row  items-center">
           <Link href="/" className="flex flex-row items-center space-x-2">
-            <CircleCheckBig className="w-6 h-6" />
-            <h2 className="font-bold text-lg">TaskFlow</h2>
+            <CircleCheckBig className="w-6 h-6 text-primary" />
+            <h2 className="font-bold text-lg text-black dark:text-white">
+              TaskFlow
+            </h2>
           </Link>
-          <nav className="text-gray-400 text-sm font-medium space-x-4 hidden md:flex md:gap-6 md:ml-6">
+          <nav className="text-neutral-600 dark:text-gray-400 text-sm font-medium space-x-4 hidden md:flex md:gap-6 md:ml-6">
             {links.map((link) => (
               <Link key={link.path} href={link.path}>
                 {link.title}
@@ -32,8 +34,8 @@ const Navbar = () => {
           </nav>
         </div>
         <div className="flex flex-row space-x-2 items-center">
-          <UserNav />
           <ToggleTheme />
+          <UserNav />
           <Button
             variant="ghost"
             size="icon"

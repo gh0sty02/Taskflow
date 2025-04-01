@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { FiGithub } from "react-icons/fi";
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signIn } from "@/auth";
+import TextInput from "@/components/TextInput";
+import PasswordInput from "@/components/PasswordInput";
 
+/// @todo - Add form validation
+/// @todo - use refactored TextInput and Password input
 function LoginPage() {
   return (
-    <div className="container flex flex-col items-center justify-center flex-1 space-y-4">
+    <div className="container flex flex-col items-center justify-center flex-1 space-y-4 sm:w-[460px]">
       <div className="flex flex-col items-center">
         <h2 className="text-xl font-semibold">Welcome Back</h2>
         <p className="text-muted-foreground text-sm mt-2">
@@ -25,7 +27,7 @@ function LoginPage() {
         <div className="w-full p-6 pt-0 space-y-4">
           <Button
             variant="outline"
-            className="text-white p-2 rounded-lg bg-transparent w-full"
+            className="text-black dark:text-white p-2 rounded-lg bg-transparent w-full"
             onClick={async () => {
               "use server";
               await signIn("github");
@@ -51,44 +53,20 @@ function LoginPage() {
             }}
             className="grid gap-2"
           >
-            {/* used to redirect to the authenticated page after login  */}
-            {/* <input type="hidden" name="redirectTo" value="/" /> */}
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row justify-between">
-                <Label htmlFor="email" className="mb-0">
-                  Email
-                </Label>
-
-                <Link
-                  href="/forgot-password"
-                  className="text-muted-foreground text-xs"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <Input
-                type="text"
-                id="email"
-                name="email"
-                placeholder="
-                name@example.com
-"
-                autoComplete="false"
-                className="p-2"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email" className="mb-0">
-                Password
-              </Label>
-
-              <Input
-                name="password"
-                type="password"
-                id="password"
-                placeholder="Password"
-              />
-            </div>
+            <TextInput
+              name="email"
+              id="email"
+              placeholder="name@example.com"
+              htmlFor="email"
+              label="Email"
+            />
+            <PasswordInput
+              name="password"
+              id="password"
+              htmlFor="password"
+              label="Password"
+              showHint={false}
+            />
             <Button type="submit" className="mt-4 w-full">
               Sign in
             </Button>
@@ -96,7 +74,7 @@ function LoginPage() {
         </div>
         <p className="text-muted-foreground text-sm font-medium p-6 pt-0 text-center">
           Don&apos;t have an account?{" "}
-          <Link className="text-white" href="/register">
+          <Link className="text-primary" href="/register">
             Sign up
           </Link>
           .

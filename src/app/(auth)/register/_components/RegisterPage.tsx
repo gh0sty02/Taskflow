@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { FiGithub } from "react-icons/fi";
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { signIn } from "@/auth";
 import { Checkbox } from "@/components/ui/checkbox";
 import TextInput from "@/components/TextInput";
 import PasswordInput from "@/components/PasswordInput";
+
+/// @todo - Add form validation
+/// @todo - Add form submission
 
 function RegisterPage() {
   return (
@@ -28,7 +29,7 @@ function RegisterPage() {
         <div className="w-full p-6 pt-0 space-y-4">
           <Button
             variant="outline"
-            className="text-white p-2 rounded-lg bg-transparent w-full"
+            className="text-black dark:text-white p-2 rounded-lg bg-transparent w-full"
             onClick={async () => {
               "use server";
               await signIn("github");
@@ -104,7 +105,7 @@ function RegisterPage() {
         </div>
         <p className="text-muted-foreground text-sm font-medium p-6 pt-0 text-center">
           Already Have an account?{" "}
-          <Link className="text-white" href="/login">
+          <Link className="text-primary" href="/login">
             Sign in
           </Link>
           .
