@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { FiGithub } from "react-icons/fi";
 import React from "react";
@@ -6,11 +7,53 @@ import { signIn } from "@/auth";
 import { Checkbox } from "@/components/ui/checkbox";
 import TextInput from "@/components/TextInput";
 import PasswordInput from "@/components/PasswordInput";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 /// @todo - Add form validation
 /// @todo - Add form submission
 
+const registerFormSchema = z
+  .object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email"),
+    password: z.string().min(8, "Password must be at least 8 characters long"),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters long"),
+  })
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        path: ["confirmPassword"],
+        message: "Passwords do not match",
+        code: "custom",
+      });
+    }
+  });
+
 function RegisterPage() {
+  const form = useForm<z.output<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
   return (
     <div className="container flex flex-col items-center justify-center flex-1 space-y-4 sm:w-[460px]">
       <div className="flex flex-col items-center">
@@ -30,10 +73,9 @@ function RegisterPage() {
           <Button
             variant="outline"
             className="text-black dark:text-white p-2 rounded-lg bg-transparent w-full"
-            onClick={async () => {
-              "use server";
-              await signIn("github");
-            }}
+            // onClick={async () => {
+            //   // await signIn("github");
+            // }}
           >
             <FiGithub className="h-4 w-4 mr-2" />
             Github
@@ -48,60 +90,91 @@ function RegisterPage() {
               </span>
             </div>
           </div>
-          <form
-            action={async (formData) => {
-              "use server";
-              // log everythign from formData
-              for (const [key, value] of formData.entries()) {
-                console.log(key, value);
-              }
-            }}
-            className="grid gap-2 space-y-2"
-          >
-            <TextInput
-              htmlFor="name"
-              label="Full Name"
-              id="name"
-              name="name"
-              placeholder="John Doe"
-            />
-            <TextInput
-              htmlFor="email"
-              label="Email"
-              id="email"
-              name="email"
-              placeholder="name@example.com"
-            />
+          <Form {...form}>
+            <form
+              className="space-y-4"
+              onSubmit={form.handleSubmit(console.log)}
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="name@example.com" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-            <PasswordInput
-              htmlFor="password"
-              label="Password"
-              id="password"
-              name="password"
-              showHint={true}
-            />
-            <PasswordInput
-              htmlFor="confirm-password"
-              label="Confirm Password"
-              id="confirm-password"
-              name="confirm-password"
-              showHint={false}
-            />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
+                    </FormControl>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" />
-              <label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                I agree to the{" "}
-                <span className="text-blue-500">terms and conditions</span>
-              </label>
-            </div>
-            <Button type="submit" className="mt-4 w-full">
-              Create Account
-            </Button>
-          </form>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      Password may contain at least 8 characters, including
+                      letters, numbers, and symbols.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex items-center space-x-2">
+                <Checkbox id="terms" />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I agree to the{" "}
+                  <span className="text-blue-500">terms and conditions</span>
+                </label>
+              </div>
+              <Button type="submit" className="mt-4 w-full">
+                Create Account
+              </Button>
+            </form>
+          </Form>
         </div>
         <p className="text-muted-foreground text-sm font-medium p-6 pt-0 text-center">
           Already Have an account?{" "}
