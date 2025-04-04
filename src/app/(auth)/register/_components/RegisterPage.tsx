@@ -1,16 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { FiGithub } from "react-icons/fi";
-import React from "react";
 import Link from "next/link";
-import { signIn } from "@/auth";
 import { Checkbox } from "@/components/ui/checkbox";
-import TextInput from "@/components/TextInput";
-import PasswordInput from "@/components/PasswordInput";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { registerFormSchema } from "@/schemas/auth";
 import {
   Form,
   FormControl,
@@ -25,25 +21,6 @@ import { Input } from "@/components/ui/input";
 /// @todo - Add form validation
 /// @todo - Add form submission
 
-const registerFormSchema = z
-  .object({
-    name: z.string().min(1, "Name is required"),
-    email: z.string().email("Invalid email"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters long"),
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        path: ["confirmPassword"],
-        message: "Passwords do not match",
-        code: "custom",
-      });
-    }
-  });
-
 function RegisterPage() {
   const form = useForm<z.output<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -52,8 +29,14 @@ function RegisterPage() {
       email: "",
       password: "",
       confirmPassword: "",
+      agreeTermsAndConditons: false,
     },
   });
+
+  const agreeTermsAndConditons = form.watch("agreeTermsAndConditons");
+  const onSubmitHandler = (formData: z.infer<typeof registerFormSchema>) => {
+    console.log(formData);
+  };
   return (
     <div className="container flex flex-col items-center justify-center flex-1 space-y-4 sm:w-[460px]">
       <div className="flex flex-col items-center">
@@ -93,7 +76,7 @@ function RegisterPage() {
           <Form {...form}>
             <form
               className="space-y-4"
-              onSubmit={form.handleSubmit(console.log)}
+              onSubmit={form.handleSubmit(onSubmitHandler)}
             >
               <FormField
                 control={form.control}
@@ -104,7 +87,7 @@ function RegisterPage() {
                     <FormControl>
                       <Input placeholder="John Doe" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs text-red-600" />
                   </FormItem>
                 )}
               />
@@ -160,17 +143,31 @@ function RegisterPage() {
                   </FormItem>
                 )}
               />
-              <div className="flex items-center space-x-2">
-                <Checkbox id="terms" />
-                <label
-                  htmlFor="terms"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  I agree to the{" "}
-                  <span className="text-blue-500">terms and conditions</span>
-                </label>
-              </div>
-              <Button type="submit" className="mt-4 w-full">
+              <FormField
+                control={form.control}
+                name="agreeTermsAndConditons"
+                render={({ field }) => (
+                  <FormItem className="flex space-x-2 items-center">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="">
+                      I agree to the{" "}
+                      <span className="text-blue-500">
+                        terms and conditions
+                      </span>
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+              <Button
+                disabled={!agreeTermsAndConditons}
+                type="submit"
+                className="mt-4 w-full"
+              >
                 Create Account
               </Button>
             </form>
