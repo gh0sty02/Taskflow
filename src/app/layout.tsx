@@ -32,7 +32,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navbar />
-            {children}
+            <main className="flex flex-col items-center justify-center flex-1">
+              {children}
+            </main>
             <Footer />
           </ThemeProvider>
         </AnimatePresence>
