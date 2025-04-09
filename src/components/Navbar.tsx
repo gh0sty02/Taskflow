@@ -56,7 +56,11 @@ const Navbar = () => {
           className="flex flex-col space-y-4 md:hidden px-8 text-gray-400 text-sm font-medium pb-4"
         >
           {links.map((link) => (
-            <Link key={link.path} href={link.path} className="hover:text-white">
+            <Link
+              key={link.path}
+              href={link.path}
+              className="hover:text-white cursor-pointer"
+            >
               {link.title}
             </Link>
           ))}
